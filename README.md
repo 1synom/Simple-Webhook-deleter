@@ -20,7 +20,7 @@ A lightweight web app to quickly and securely delete Discord webhooks directly i
 ---
 
 ## Overview
-`Simple Webhook Deleter` allows you to remove Discord webhooks quickly and privately. Everything runs locally in your browser, ensuring no data leaves your computer. Perfect for managing suspicious webhooks or cleaning up your own.
+`Simple Webhook Deleter` allows you to remove Discord webhooks quickly and privately. Everything runs locally in your browser, ensuring no data leaves your computer.
 
 ---
 
@@ -45,6 +45,7 @@ This project is licensed under the **MIT License** – see the [LICENSE](./LICEN
 Made with ❤️ by [**1synom**](https://github.com/1synom)  
 
 © 2025 · All rights reserved
+
 
 
 
