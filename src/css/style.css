@@ -1,0 +1,45 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@keyframes fade-in-up {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 1s ease-out forwards;
+}
+
+@keyframes fade-in-footer {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-footer {
+  animation: fade-in-footer 1.2s ease-out forwards;
+}
+
+.animate-pulse-hover {
+  transition: transform 0.3s ease-in-out;
+}
+
+.animate-pulse-hover:hover {
+  transform: scale(1.05);
+}
+
+.bg-discord-blurple {
+  background-color: #5865F2;
+}
