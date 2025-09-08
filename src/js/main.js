@@ -17,15 +17,16 @@ let webhookArray = [];
 function showStatus(message, type = "info") {
   const div = document.createElement("div");
   div.className = `px-4 py-3 rounded-lg shadow-md ${
-    type === "success"
-      ? "bg-green-500 text-white"
-      : type === "error"
-      ? "bg-red-500 text-white"
-      : "bg-gray-700 text-white"
-  }`;
+    type === "success" ? "bg-green-500 text-white" :
+    type === "error" ? "bg-red-500 text-white" :
+    "bg-gray-700 text-white"
+  } transition-opacity duration-500`;
   div.textContent = message;
   statusContainer.appendChild(div);
-  setTimeout(() => div.remove(), 4000);
+  setTimeout(() => {
+    div.classList.add("opacity-0");
+    setTimeout(() => div.remove(), 500);
+  }, 4000);
 }
 
 function isDiscordWebhook(url) {
@@ -33,16 +34,18 @@ function isDiscordWebhook(url) {
 }
 
 async function deleteWebhook(url) {
-  if (!isDiscordWebhook(url)) {
-    showStatus("Invalid Discord webhook URL", "error");
-    return;
-  }
+  if (!isDiscordWebhook(url)) return showStatus("Invalid Discord webhook URL", "error");
   try {
     const response = await fetch(url, { method: "DELETE" });
     if (response.ok) {
       showStatus("Webhook deleted successfully", "success");
     } else {
-      showStatus("Failed to delete webhook", "error");
+      let message = `Failed to delete webhook: ${response.status}`;
+      try {
+        const data = await response.json().catch(() => ({}));
+        if (data.message) message += ` - ${data.message}`;
+      } catch {}
+      showStatus(message, "error");
     }
   } catch {
     showStatus("Failed to delete webhook", "error");
@@ -55,26 +58,27 @@ deleteBtn.addEventListener("click", () => {
   else showStatus("Please enter a webhook URL", "error");
 });
 
-copyBtn.addEventListener("click", () => {
-  if (webhookUrlInput.value) {
-    navigator.clipboard.writeText(webhookUrlInput.value);
+copyBtn.addEventListener("click", async () => {
+  if (!webhookUrlInput.value) return showStatus("Nothing to copy", "error");
+  try {
+    await navigator.clipboard.writeText(webhookUrlInput.value);
     showStatus("Webhook URL copied to clipboard", "success");
-  } else {
-    showStatus("Nothing to copy", "error");
+  } catch {
+    showStatus("Failed to copy URL", "error");
   }
 });
 
 addWebhookBtn.addEventListener("click", () => {
   const url = batchInput.value.trim();
-  if (!url) {
-    showStatus("Please enter a webhook URL", "error");
-    return;
-  }
-  if (!isDiscordWebhook(url)) {
-    showStatus("Invalid Discord webhook URL", "error");
-    return;
-  }
+  if (!url) return showStatus("Please enter a webhook URL", "error");
+  if (!isDiscordWebhook(url)) return showStatus("Invalid Discord webhook URL", "error");
+
+  const normalizedUrl = url.toLowerCase();
+  if (webhookArray.map(u => u.toLowerCase()).includes(normalizedUrl)) 
+    return showStatus("Webhook already added", "error");
+
   webhookArray.push(url);
+
   const div = document.createElement("div");
   div.className = "flex justify-between items-center bg-gray-100 dark:bg-gray-700 p-2 rounded-lg";
   div.innerHTML = `
@@ -86,50 +90,35 @@ addWebhookBtn.addEventListener("click", () => {
   deleteAllBtn.disabled = false;
 
   div.querySelector(".remove-btn").addEventListener("click", () => {
-    webhookArray = webhookArray.filter((item) => item !== url);
+    webhookArray = webhookArray.filter(item => item !== url);
     div.remove();
-    if (webhookArray.length === 0) deleteAllBtn.disabled = true;
+    if (!webhookArray.length) deleteAllBtn.disabled = true;
   });
 });
 
 deleteAllBtn.addEventListener("click", async () => {
-  if (webhookArray.length === 0) {
-    showStatus("No webhooks to delete", "error");
-    return;
-  }
-  for (const url of webhookArray) {
-    await deleteWebhook(url);
-  }
+  if (!webhookArray.length) return showStatus("No webhooks to delete", "error");
+  
+  await Promise.all(webhookArray.map(url => deleteWebhook(url)));
+
   webhookArray = [];
   webhookList.innerHTML = "";
   deleteAllBtn.disabled = true;
 });
 
 function updateThemeIcons() {
-  if (document.documentElement.classList.contains("dark")) {
-    darkIcon.classList.add("hidden");
-    lightIcon.classList.remove("hidden");
-  } else {
-    darkIcon.classList.remove("hidden");
-    lightIcon.classList.add("hidden");
-  }
+  darkIcon.classList.toggle("hidden", document.documentElement.classList.contains("dark"));
+  lightIcon.classList.toggle("hidden", !document.documentElement.classList.contains("dark"));
 }
 
 themeToggleBtn.addEventListener("click", () => {
   document.documentElement.classList.toggle("dark");
   updateThemeIcons();
-  if (document.documentElement.classList.contains("dark")) {
-    localStorage.setItem("theme", "dark");
-  } else {
-    localStorage.setItem("theme", "light");
-  }
+  localStorage.setItem("theme", document.documentElement.classList.contains("dark") ? "dark" : "light");
 });
 
-if (
-  localStorage.getItem("theme") === "dark" ||
-  (!localStorage.getItem("theme") &&
-    window.matchMedia("(prefers-color-scheme: dark)").matches)
-) {
+if (localStorage.getItem("theme") === "dark" || 
+    (!localStorage.getItem("theme") && window.matchMedia("(prefers-color-scheme: dark)").matches)) {
   document.documentElement.classList.add("dark");
 } else {
   document.documentElement.classList.remove("dark");
