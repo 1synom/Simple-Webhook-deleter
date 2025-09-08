@@ -80,7 +80,7 @@ addWebhookBtn.addEventListener("click", () => {
   webhookArray.push(url);
 
   const div = document.createElement("div");
-  // Flex-Row mit Button direkt rechts vom Text, keine horizontale Scroll-Leiste
+
   div.className = "flex flex-row items-center bg-gray-100 dark:bg-gray-700 p-2 rounded-lg w-full gap-2 overflow-hidden";
   div.innerHTML = `
     <span class="flex-1 text-sm text-gray-800 dark:text-gray-200 break-words truncate">${url}</span>
@@ -125,3 +125,4 @@ if (localStorage.getItem("theme") === "dark" ||
   document.documentElement.classList.remove("dark");
 }
 updateThemeIcons();
+
