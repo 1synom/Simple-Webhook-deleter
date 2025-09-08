@@ -34,6 +34,8 @@ A lightweight web app to quickly and securely delete Discord webhooks directly i
 
 **Tip:** Open the `index.html` file in your browser—no installation or setup required.
 
+This project might be expanded in the future to allow sending messages and other features, but nothing is certain yet.
+
 ---
 
 ## License
@@ -45,6 +47,7 @@ This project is licensed under the **MIT License** – see the [LICENSE](./LICEN
 Made with ❤️ by [**1synom**](https://github.com/1synom)  
 
 © 2025 · All rights reserved
+
 
 
 
