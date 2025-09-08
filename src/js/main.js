@@ -82,7 +82,7 @@ addWebhookBtn.addEventListener("click", () => {
   const div = document.createElement("div");
   div.className = "flex flex-col sm:flex-row justify-between items-start sm:items-center bg-gray-100 dark:bg-gray-700 p-2 rounded-lg overflow-hidden w-full";
   div.innerHTML = `
-    <span class="truncate flex-1 mr-0 sm:mr-2 text-sm text-gray-800 dark:text-gray-200 max-w-full break-words mb-2 sm:mb-0">${url}</span>
+    <span class="flex-1 mr-0 sm:mr-2 text-sm text-gray-800 dark:text-gray-200 max-w-full break-words">${url}</span>
     <button class="text-red-500 hover:text-red-700 remove-btn flex-shrink-0">Remove</button>
   `;
   webhookList.appendChild(div);
