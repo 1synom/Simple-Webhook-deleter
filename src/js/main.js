@@ -28,7 +28,15 @@ function showStatus(message, type = "info") {
   setTimeout(() => div.remove(), 4000);
 }
 
+function isDiscordWebhook(url) {
+  return /^https:\/\/(ptb\.|canary\.)?discord\.com\/api\/webhooks\/\d+\/[\w-]+$/.test(url);
+}
+
 async function deleteWebhook(url) {
+  if (!isDiscordWebhook(url)) {
+    showStatus("Invalid Discord webhook URL", "error");
+    return;
+  }
   try {
     const response = await fetch(url, { method: "DELETE" });
     if (response.ok) {
@@ -37,7 +45,7 @@ async function deleteWebhook(url) {
       showStatus("Failed to delete webhook", "error");
     }
   } catch {
-    showStatus("Invalid webhook URL", "error");
+    showStatus("Failed to delete webhook", "error");
   }
 }
 
@@ -58,27 +66,30 @@ copyBtn.addEventListener("click", () => {
 
 addWebhookBtn.addEventListener("click", () => {
   const url = batchInput.value.trim();
-  if (url) {
-    webhookArray.push(url);
-    const div = document.createElement("div");
-    div.className =
-      "flex justify-between items-center bg-gray-100 dark:bg-gray-700 p-2 rounded-lg";
-    div.innerHTML = `
-      <span class="truncate flex-1 mr-2 text-sm text-gray-800 dark:text-gray-200">${url}</span>
-      <button class="text-red-500 hover:text-red-700 remove-btn">Remove</button>
-    `;
-    webhookList.appendChild(div);
-    batchInput.value = "";
-    deleteAllBtn.disabled = false;
-
-    div.querySelector(".remove-btn").addEventListener("click", () => {
-      webhookArray = webhookArray.filter((item) => item !== url);
-      div.remove();
-      if (webhookArray.length === 0) deleteAllBtn.disabled = true;
-    });
-  } else {
+  if (!url) {
     showStatus("Please enter a webhook URL", "error");
+    return;
   }
+  if (!isDiscordWebhook(url)) {
+    showStatus("Invalid Discord webhook URL", "error");
+    return;
+  }
+  webhookArray.push(url);
+  const div = document.createElement("div");
+  div.className = "flex justify-between items-center bg-gray-100 dark:bg-gray-700 p-2 rounded-lg";
+  div.innerHTML = `
+    <span class="truncate flex-1 mr-2 text-sm text-gray-800 dark:text-gray-200">${url}</span>
+    <button class="text-red-500 hover:text-red-700 remove-btn">Remove</button>
+  `;
+  webhookList.appendChild(div);
+  batchInput.value = "";
+  deleteAllBtn.disabled = false;
+
+  div.querySelector(".remove-btn").addEventListener("click", () => {
+    webhookArray = webhookArray.filter((item) => item !== url);
+    div.remove();
+    if (webhookArray.length === 0) deleteAllBtn.disabled = true;
+  });
 });
 
 deleteAllBtn.addEventListener("click", async () => {
