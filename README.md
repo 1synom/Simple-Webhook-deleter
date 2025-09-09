@@ -2,7 +2,7 @@
 
 [View on GitHub](https://github.com/1synom/Simple-Webhook-deleter)
 
-[View demo](https://simple-webhook-deleter-demo.netlify.app/)
+[View demo](https://simple-webhook-deleter.netlify.app)
 
 A lightweight web app to quickly and securely delete Discord webhooks directly in your browser.
 
@@ -47,6 +47,7 @@ This project is licensed under the **MIT License** – see the [LICENSE](./LICEN
 Made with ❤️ by [**1synom**](https://github.com/1synom)  
 
 © 2025 · All rights reserved
+
 
 
 
