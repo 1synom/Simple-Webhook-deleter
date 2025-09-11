@@ -8,7 +8,7 @@ A lightweight web app to quickly and securely delete Discord webhooks directly i
 
 **Note:** When deleting webhooks, Discord audit logs will show "unknown user" as the executor.
 
-![Preview Screenshot](https://media.discordapp.net/attachments/1408164977583460413/1414633932909187172/image.png?ex=68c04804&is=68bef684&hm=bcf88ea277b70f355e055a489799ffa0a238e39cf2c4761409adf8755c6060ff&=&format=webp&quality=lossless&width=825&height=431)
+![Preview Screenshot](https://imgur.com/a/5r11sRA)
 
 ---
 
@@ -47,6 +47,7 @@ This project is licensed under the **MIT License** – see the [LICENSE](./LICEN
 Made with ❤️ by [**1synom**](https://github.com/1synom)  
 
 © 2025 · All rights reserved
+
 
 
 
